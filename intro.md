@@ -8,9 +8,11 @@ Dans cette première partie, nous allons créer une application très simple qui
 - Créer un dossier qu’on appelle: `hello-world`
 - Créer un fichier `index.js` dans ce dossier
 - Écrire dans ce fichier
+
 ```js
-console.log('Hello world');
+console.log('Hello world')
 ```
+
 - Dans le terminal (dans le dossier `hello-world`), lancer la commande:
 
 ```
@@ -21,7 +23,6 @@ Vous devriez voir le résultat suivant:
 
 ```
 hello world
-
 ```
 
 Votre première application est terminée ! Bon elle ne fait pas grand chose alors on va l'améliorer un peu.
@@ -36,12 +37,12 @@ Sur chacune des étapes, je vous conseille de **taper** le code et de le compren
 ```js
 // index.js
 
-var sum = function (a, b) {
-  return a + b;
+const sum = function(a, b) {
+  return a + b
 }
 
-var result = sum(1, 3);
-console.log('The result is ' + result);
+const result = sum(1, 3)
+console.log('The result is ' + result)
 ```
 
 Ici nous avons créé une application qui calcule la somme `1 + 3`.
@@ -71,22 +72,22 @@ En Node.js chaque fichier est un module, nous allons donc:
 ```js
 // calc.js
 
-var sum = function (a, b) {
-  return a + b;
-};
+const sum = function(a, b) {
+  return a + b
+}
 
 module.exports = {
   sum: sum
-};
+}
 ```
 
-*... C'est quoi ce `module.exports` et ce JSON ? tu m'as perdu.*
+_... C'est quoi ce `module.exports` et ce JSON ? tu m'as perdu._
 
 Dans chacun des fichiers, et donc des modules, certaines variables et fonctions particulières sont disponibles.
 
 `module` est une des variables disponibles dans chacun des modules. Cette variable possède une propriété `exports` qui contient un objet particulier. Cet objet est l'objet le plus important d'un module.
 
-*La raison pour laquelle ces variables particulières sont disponibles dans les modules dépasse le scope de ce cours, mais pour les curieux, nous pourrons en discuter à la fin du cours.*
+_La raison pour laquelle ces constiables particulières sont disponibles dans les modules dépasse le scope de ce cours, mais pour les curieux, nous pourrons en discuter à la fin du cours._
 
 L'objet qui se trouve dans `module.exports` est l'objet que l'on pourra récupérer quand on voudra utiliser le module. Rien ne vaut un exemple.
 
@@ -96,18 +97,20 @@ L'objet qui se trouve dans `module.exports` est l'objet que l'on pourra récupé
 // index.js
 
 // retrieve the calc module
-var calc = require('./calc.js');
+const calc = require('./calc.js')
 
-var result = calc.sum(1, 3);
-console.log(result);
+const result = calc.sum(1, 3)
+console.log(result)
 ```
 
 Et on lance notre application:
+
 ```
 node index.js
 ```
 
 Et vous devriez voir le resultat:
+
 ```
 4
 ```
@@ -127,13 +130,13 @@ Dans le fichier `index.js`:
 - Nous avons récupéré l'objet qui est dans `module.exports` du fichier grâce à la fonction `require`. (`require` est une fonction disponible dans tous les modules, tout comme la variable `module`) Nous avons mis cet objet dans la variable calc.
 - En faisant `calc.sum()`, nous accédons à la fonction `sum` définie dans le module.
 
-*Ça fait beaucoup de chose juste pour mettre un fichier ...*
+_Ça fait beaucoup de chose juste pour mettre un fichier ..._
 
 Oui. Mais c'est nécessaire et nous reviendrons sur ce fonctionnement qui est assez complexe.
 
 ## 3. Création d'un serveur
 
-*Bon moi par contre je suis venu pour faire du web alors ta calculatrice ...*
+_Bon moi par contre je suis venu pour faire du web alors ta calculatrice ..._
 
 Dans le cadre de ce cours, nous allons essentiellement nous concentrer sur le développement back-end. Nous allons créer une API calculatrice. C'est à dire qu'une autre application pourra faire appel à notre API pour faire ses calculs.
 
@@ -162,7 +165,7 @@ Nous avons vu précédemment comment utiliser un module que nous avons écrit av
 ```js
 // index.js
 
-var express = require('express');
+const express = require('express')
 ```
 
 Le framework `express` va nous permettre de créer facilement des routes et de répondre aux requêtes des utilisateurs (car oui, c'est quand même le but d'un serveur !). Nous allons définir une première route `/` qui va répondre le fameux `Hello world!`.
@@ -172,19 +175,19 @@ Ce code ne s'invente pas, il faut bien entendu regarder dans la documentation du
 ```js
 // index.js
 
-var express = require('express');
-var app = express();
+const express = require('express')
+const app = express()
 
-app.get('/', function (req, res) {
-  res.send('Hello World!');
-});
+app.get('/', function(req, res) {
+  res.send('Hello World!')
+})
 ```
 
 Ici, nous avons créé une nouvelle application `app` grâce au module `express`. Nous avons ensuite créé une route pour cette application (`/`) avec la méthode `GET` et nous lui avons associé une callback, qui prend en paramètre la requête `req` et la réponse `res`.
 
 Nous avons enfin ajouté `Hello world` à la réponse.
 
-*Ça y est, je peux appeler mon Hello world ???!*
+_Ça y est, je peux appeler mon Hello world ???!_
 
 Pas si vite. Pour l'instant nous avons créé une application express mais on ne "l'expose" pas encore.
 
@@ -193,16 +196,16 @@ Nous allons utiliser la fonction `listen` qui permet comme son nom l'indique d'�
 ```js
 // index.js
 
-var express = require('express');
-var app = express();
+const express = require('express')
+const app = express()
 
-app.get('/', function (req, res) {
-  res.send('Hello World!');
-});
+app.get('/', function(req, res) {
+  res.send('Hello World!')
+})
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
-});
+app.listen(3000, function() {
+  console.log('Example app listening on port 3000!')
+})
 ```
 
 Et voilà! Vous pouvez maintenant lancer votre serveur avec la commande:
@@ -245,17 +248,18 @@ Bien entendu, il n'est pas nécessaire de créer un module à part dans un cas a
 
 Nous allons reprendre notre application `express` et y ajouter une route pour faire une addition. Pour faire une addition, il faut que l'utilisateur puisse choisir quels nombres il veut additionner.
 
-*Pour l'instant nous allons oublier notre module et faire le calcul directement dans la fonction callback de la route.*
+_Pour l'instant nous allons oublier notre module et faire le calcul directement dans la fonction callback de la route._
 
 Essayer de faire cet exercice sans regarder la correction.
 
 Ajouter une nouvelle route avec 2 paramètres de route, le premier et le deuxième input. Pour ajouter un paramètre de route il faut ajouter `:` devant le paramètre. On peut ensuite recupérer le paramètre via la `req.params.paramName`.
 
 Par exemple:
+
 ```js
-app.get('/hello/:name', function (req, res) {
-  res.send('Hello ' + req.params.name + '!');
-});
+app.get('/hello/:name', function(req, res) {
+  res.send('Hello ' + req.params.name + '!')
+})
 ```
 
 répondra à `/hello/maxime` par `Hello maxime!`.
@@ -265,27 +269,28 @@ Attention: les paramètres passés sont des `string`. Veillez donc à ne pas ren
 Prennez le temps de tester votre nouvelle route avec Postman et vérifier que les résultats sont cohérents.
 
 Correction:
- ```js
- var express = require('express');
- var app = express();
 
- app.get('/', function (req, res) {
-   res.send('Hello World!');
- });
+```js
+const express = require('express')
+const app = express()
 
- app.get('/add/:input1/:input2', function (req, res) {
-   var input1 = parseInt(req.params.input1);
-   var input2 = parseInt(req.params.input2);
+app.get('/', function(req, res) {
+  res.send('Hello World!')
+})
 
-   var result = input1 + input2;
+app.get('/add/:input1/:input2', function(req, res) {
+  const input1 = parseInt(req.params.input1)
+  const input2 = parseInt(req.params.input2)
 
-   res.send(result.toString());
- });
+  const result = input1 + input2
 
- app.listen(3000, function () {
-   console.log('Example app listening on port 3000!');
- });
- ```
+  res.send(result.toString())
+})
+
+app.listen(3000, function() {
+  console.log('Example app listening on port 3000!')
+})
+```
 
 - Nous avons donc 2 paramètres de route (input1, input2) et nous les récupérons via `req.params` (paramètres de la requête).
 - Nous utilisons `parseInt()` pour transformer les paramètres en entier pour le calcul.
@@ -299,27 +304,27 @@ Nous allons maintenant utiliser notre module calculatrice pour le calcul.
 À nouveau, essayer de faire cette exercice sans regarder la correction. Le but est de faire exactement la même chose sauf que le calcul doit être effectué par le module et sa méthode `sum` au lieu de faire directement le calcul dans la callback.
 
 ```js
-var express = require('express');
-var app = express();
+const express = require('express')
+const app = express()
 
-var calc = require('./calc.js');
+const calc = require('./calc.js')
 
-app.get('/', function (req, res) {
-  res.send('Hello World!');
-});
+app.get('/', function(req, res) {
+  res.send('Hello World!')
+})
 
-app.get('/add/:input1/:input2', function (req, res) {
-  var input1 = parseInt(req.params.input1);
-  var input2 = parseInt(req.params.input2);
+app.get('/add/:input1/:input2', function(req, res) {
+  const input1 = parseInt(req.params.input1)
+  const input2 = parseInt(req.params.input2)
 
-  var result = calc.sum(input1, input2);
+  const result = calc.sum(input1, input2)
 
-  res.send(result.toString());
-});
+  res.send(result.toString())
+})
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
-});
+app.listen(3000, function() {
+  console.log('Example app listening on port 3000!')
+})
 ```
 
 ## 6. Les middlewares d'Express
@@ -327,6 +332,7 @@ app.listen(3000, function () {
 Express est un framework. Il fournit plusieurs petites briques appelées middlewares permettant de remplir différentes tâches.
 
 Le but d'un middleware est d'intercepter la requête avant qu'elle soit traitée pour différentes raisons possibles:
+
 - Exécuter du code
 - Changer la requête et/ou la réponse
 - Interrompre le cycle de vie requête/réponse
@@ -337,22 +343,22 @@ Le but d'un middleware est d'intercepter la requête avant qu'elle soit traitée
 Nous allons créer notre premier middleware. Le but du middleware est de logger le timestamp des requêtes des utilisateurs de l'API. Avant les déclarations des routes, ajouter le code suivant:
 
 ```js
-app.use(function (req, res, next) {
-  console.log('Time:', Date.now());
-});
+app.use(function(req, res, next) {
+  console.log('Time:', Date.now())
+})
 ```
 
 Essayez maintenant d'appeler une route avec Postman et regarder votre console. Les timestamps des requêtes sont affichés.
 
-*Mais je ne comprends pas, je n'ai plus de résultat ...*
+_Mais je ne comprends pas, je n'ai plus de résultat ..._
 
 Le middleware a intercepté la requête, il peut ensuite faire ce qu'il veut avec la requête. Dans notre cas, nous voulons rendre la main à Express, nous allons donc lui dire de continuer en appelant la fonction next.
 
 ```js
-app.use(function (req, res, next) {
-  console.log('Time:', Date.now());
-  next();
-});
+app.use(function(req, res, next) {
+  console.log('Time:', Date.now())
+  next()
+})
 ```
 
 Voilà, on a récupéré notre résultat.
@@ -366,16 +372,16 @@ Partons du code suivant:
 ```js
 // index.js
 
-var express = require('express');
-var app = express();
+const express = require('express')
+const app = express()
 
-app.get('/', function (req, res) {
-  res.send('Hello ! you already visited this route ' + 0 + ' time(s)');
-});
+app.get('/', function(req, res) {
+  res.send('Hello ! you already visited this route ' + 0 + ' time(s)')
+})
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
-});
+app.listen(3000, function() {
+  console.log('Example app listening on port 3000!')
+})
 ```
 
 Le but est de déterminer grâce à la session utilisateur, combien de fois l'utilisateur a visité la route `/`.
@@ -391,26 +397,27 @@ Nous allons ensuite utiliser les sessions utilisateurs pour compter le nombre de
 ```js
 // index.js
 
-var express = require('express');
-var session = require('express-session');
-var app = express();
+const express = require('express')
+const session = require('express-session')
+const app = express()
 
-app.use(session({ secret: 'mysecrettoken'}));
+app.use(session({ secret: 'mysecrettoken' }))
 
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
   if (!req.session.views) {
-    req.session.views = 0;
+    req.session.views = 0
   }
 
-  req.session.views++;
-  res.send('Hello ! you already visited this route ' + req.session.views + ' time(s)');
-});
+  req.session.views++
+  res.send(
+    'Hello ! you already visited this route ' + req.session.views + ' time(s)'
+  )
+})
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
-});
+app.listen(3000, function() {
+  console.log('Example app listening on port 3000!')
+})
 ```
-
 
 Le middleware `express-session` nous donne accès à `req.session`, un objet propre à chaque session utilisateur. Une session utilisateur est determinée grâce à un cookie de session contenant un identifiant de session. En appelant une route d'express qui utilise le middle `express-session`, vous recevez un cookie. Vous pouvez regarder ce cookie dans Postman en appelant la route `/`.
 
@@ -425,25 +432,24 @@ Nous avons vu comment utiliser un middleware sur toutes les routes d'express, vo
 ```js
 // index.js
 
-var express = require('express');
-var bodyParser = require('body-parser');
-var urlEncodedParser = bodyParser.urlencoded({ extended: false });
+const express = require('express')
+const bodyParser = require('body-parser')
+const urlEncodedParser = bodyParser.urlencoded({ extended: false })
 
-var app = express();
+const app = express()
 
-app.get('/', function (req, res) {
-  res.send('Hello world !');
-});
+app.get('/', function(req, res) {
+  res.send('Hello world !')
+})
 
-app.post('/form', urlEncodedParser, function (req, res) {
-  console.log(req.body);
-  res.send('form');
-});
+app.post('/form', urlEncodedParser, function(req, res) {
+  console.log(req.body)
+  res.send('form')
+})
 
-
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
-});
+app.listen(3000, function() {
+  console.log('Example app listening on port 3000!')
+})
 ```
 
 Le middleware va nous fournir l'objet `req.body` contenant les différents champs du formulaire urlencoded. Nous allons maintenant faire une requête POST depuis Postman:
@@ -456,7 +462,9 @@ Le middleware va nous fournir l'objet `req.body` contenant les différents champ
 On peut voir dans la console:
 
 ```js
-{ testkey: 'testvalue' }
+{
+  testkey: 'testvalue'
+}
 ```
 
 Dans l'objet `req.body`, on retrouve bien notre `testkey`. C'est de cette façon que l'on récupère les champs depuis un formulaire.
