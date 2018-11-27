@@ -1,4 +1,4 @@
-# Node.js TP
+# Introduction à Node.js
 
 ## 1. Écrire votre première application Node.js
 
@@ -37,12 +37,12 @@ Sur chacune des étapes, je vous conseille de **taper** le code et de le compren
 ```js
 // index.js
 
-const sum = function(a, b) {
+function sum(a, b) {
   return a + b
 }
 
 const result = sum(1, 3)
-console.log('The result is ' + result)
+console.log(`The result is ${result}`)
 ```
 
 Ici nous avons créé une application qui calcule la somme `1 + 3`.
@@ -72,7 +72,7 @@ En Node.js chaque fichier est un module, nous allons donc:
 ```js
 // calc.js
 
-const sum = function(a, b) {
+function sum(a, b) {
   return a + b
 }
 
@@ -100,7 +100,7 @@ L'objet qui se trouve dans `module.exports` est l'objet que l'on pourra récupé
 const calc = require('./calc.js')
 
 const result = calc.sum(1, 3)
-console.log(result)
+console.log(`The result is ${result}`)
 ```
 
 Et on lance notre application:
@@ -133,6 +133,54 @@ Dans le fichier `index.js`:
 _Ça fait beaucoup de chose juste pour mettre un fichier ..._
 
 Oui. Mais c'est nécessaire et nous reviendrons sur ce fonctionnement qui est assez complexe.
+
+**Exercice 1:** Ajoutez les fonctions de soustraction, multiplication et division à votre module et utilisez les dans `index.js`.
+
+Correction:
+
+```js
+// calc.js
+
+function sum(a, b) {
+  return a + b
+}
+
+function substract(a, b) {
+  return a - b
+}
+
+function multiply(a, b) {
+  return a * b
+}
+
+function divide(a, b) {
+  return a / b
+}
+
+module.exports = {
+  sum: sum,
+  substract: substract,
+  multiply: multiply,
+  divide: divide
+}
+```
+
+```js
+// index.js
+
+// retrieve the calc module
+const calc = require('./calc.js')
+
+const sumResult = calc.sum(1, 3)
+const substractResult = calc.substract(4, 2)
+const multiplyResult = calc.multiply(3, 2)
+const divideResult = calc.divide(6, 3)
+
+console.log(`1 + 3 = ${sumResult}`)
+console.log(`4 - 2 = ${substractResult}`)
+console.log(`3 * 2 = ${multiplyResult}`)
+console.log(`6 / 3 = ${divideResult}`)
+```
 
 ## 3. Création d'un serveur
 
@@ -252,7 +300,7 @@ _Pour l'instant nous allons oublier notre module et faire le calcul directement 
 
 Essayer de faire cet exercice sans regarder la correction.
 
-Ajouter une nouvelle route avec 2 paramètres de route, le premier et le deuxième input. Pour ajouter un paramètre de route il faut ajouter `:` devant le paramètre. On peut ensuite recupérer le paramètre via la `req.params.paramName`.
+**Exercice 2:** Ajouter une nouvelle route avec 2 paramètres de route, le premier et le deuxième input. Pour ajouter un paramètre de route il faut ajouter `:` devant le paramètre. On peut ensuite recupérer le paramètre via la `req.params.paramName`.
 
 Par exemple:
 
@@ -301,7 +349,9 @@ Récupérer le fichier calc.js vu précedemment et ajouter le dans ce même doss
 
 Nous allons maintenant utiliser notre module calculatrice pour le calcul.
 
-À nouveau, essayer de faire cette exercice sans regarder la correction. Le but est de faire exactement la même chose sauf que le calcul doit être effectué par le module et sa méthode `sum` au lieu de faire directement le calcul dans la callback.
+**Exercice 3:** Ajoutez et utilisez le module calculatrice pour faire vos calculs. Ajoutez également les routes pour la division, soustraction et multiplication.
+
+Correction:
 
 ```js
 const express = require('express')
@@ -318,6 +368,33 @@ app.get('/add/:input1/:input2', function(req, res) {
   const input2 = parseInt(req.params.input2)
 
   const result = calc.sum(input1, input2)
+
+  res.send(result.toString())
+})
+
+app.get('/substract/:input1/:input2', function(req, res) {
+  const input1 = parseInt(req.params.input1)
+  const input2 = parseInt(req.params.input2)
+
+  const result = calc.substract(input1, input2)
+
+  res.send(result.toString())
+})
+
+app.get('/multiply/:input1/:input2', function(req, res) {
+  const input1 = parseInt(req.params.input1)
+  const input2 = parseInt(req.params.input2)
+
+  const result = calc.multiply(input1, input2)
+
+  res.send(result.toString())
+})
+
+app.get('/divide/:input1/:input2', function(req, res) {
+  const input1 = parseInt(req.params.input1)
+  const input2 = parseInt(req.params.input2)
+
+  const result = calc.divide(input1, input2)
 
   res.send(result.toString())
 })
@@ -392,7 +469,13 @@ Nous allons installer le middleware `express-session`
 npm install express-session --save
 ```
 
-Nous allons ensuite utiliser les sessions utilisateurs pour compter le nombre de visites sur `/`.
+**Exercice 4**: Grâce à la [documentation d'express-session](https://github.com/expressjs/session#readme), faîtes en sorte que la route `/` renvoie le nombre de visite pour une session.
+
+Tips: Le middleware `express-session` nous donne accès à `req.session`, un objet propre à chaque session utilisateur. Une session utilisateur est determinée grâce à un cookie de session contenant un identifiant de session. En appelant une route d'express qui utilise le middle `express-session`, vous recevez un cookie. Vous pouvez regarder ce cookie dans Postman en appelant la route `/`.
+
+Si vous appelez la route `/` plusieurs fois, le compteur s'incrémente. Si vous supprimez votre cookie, le compteur se reinitialise, car vous avez perdu votre identifiant de session. Nous avons donc bien un compteur par session utilisateur.
+
+Correction:
 
 ```js
 // index.js
@@ -418,10 +501,6 @@ app.listen(3000, function() {
   console.log('Example app listening on port 3000!')
 })
 ```
-
-Le middleware `express-session` nous donne accès à `req.session`, un objet propre à chaque session utilisateur. Une session utilisateur est determinée grâce à un cookie de session contenant un identifiant de session. En appelant une route d'express qui utilise le middle `express-session`, vous recevez un cookie. Vous pouvez regarder ce cookie dans Postman en appelant la route `/`.
-
-Si vous appelez la route `/` plusieurs fois, le compteur s'incrémente. Si vous supprimez votre cookie, le compteur se reinitialise, car vous avez perdu votre identifiant de session. Nous avons donc bien un compteur par session utilisateur.
 
 ### 6.3 Gestion des formulaires
 
@@ -468,3 +547,26 @@ On peut voir dans la console:
 ```
 
 Dans l'objet `req.body`, on retrouve bien notre `testkey`. C'est de cette façon que l'on récupère les champs depuis un formulaire.
+
+**Exercice 6**: Créez une route `/concat` en POST. Cette route récupère un formulaire avec un champ `string1` et un champ `string2` et renvoie la concaténation de ces 2 strings.
+
+Correction:
+
+```js
+// index.js
+
+const express = require('express')
+const bodyParser = require('body-parser')
+const urlEncodedParser = bodyParser.urlencoded({ extended: false })
+
+const app = express()
+
+app.post('/concat', urlEncodedParser, function(req, res) {
+  const concat = req.body.string1 + req.body.string2
+  res.send(concat)
+})
+
+app.listen(3000, function() {
+  console.log('Example app listening on port 3000!')
+})
+```
